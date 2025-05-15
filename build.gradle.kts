@@ -67,7 +67,7 @@ jlink {
         } else if (org.gradle.internal.os.OperatingSystem.current().isMacOsX) {
             imageOptions = listOf(
                 "--icon",
-                "${project.projectDir}/src/main/resources/com/example/desktopproj/icon/icon.icns",
+                "${project.projectDir}/src/main/resources/com/example/desktopproj/icon/img.icns",
                 "--mac-package-name",
                 "Finance"
             )
@@ -81,7 +81,7 @@ jlink {
         } else if (org.gradle.internal.os.OperatingSystem.current().isLinux) {
             imageOptions = listOf(
                 "--icon",
-                "${project.projectDir}/src/main/resources/com/example/desktopproj/icon/icon.png"
+                "${project.projectDir}/src/main/resources/com/example/desktopproj/icon/img.png"
             )
 
             installerOptions = listOf(
