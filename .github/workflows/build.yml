@@ -8,10 +8,9 @@ jobs:
   build-windows:
     strategy:
       matrix:
-        os: ubuntu-latest
         java-version: [ 21 ]
 
-    runs-on: ${{ matrix.os }}
+    runs-on: windows-latest
 
     steps:
       - name: Checkout du code source
@@ -41,10 +40,9 @@ jobs:
   build-linux:
     strategy:
       matrix:
-        os: windows-latest
         java-version: [ 21 ]
 
-    runs-on: ${{ matrix.os }}
+    runs-on: ubuntu-latest
 
     steps:
       - name: Checkout du code source
@@ -77,10 +75,9 @@ jobs:
   build-mac:
     strategy:
       matrix:
-        os: macos-latest
         java-version: [ 21 ]
 
-    runs-on: ${{ matrix.os }}
+    runs-on: macos-latest
 
     steps:
       - name: Checkout du code source
