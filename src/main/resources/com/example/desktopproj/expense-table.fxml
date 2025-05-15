@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.control.cell.*?>
+<?import javafx.scene.layout.VBox?>
+<VBox xmlns:fx="http://javafx.com/fxml/1"
+      stylesheets="@styles/expense-table.css"
+      fx:controller="com.example.desktopproj.ExpenseTableController"
+      alignment="TOP_CENTER">
+    <Label styleClass="title" text="Tableau récapitulatif des dépense"/>
+    <TableView fx:id="tableView">
+        <columns>
+            <TableColumn text="Période">
+                <cellValueFactory>
+                    <PropertyValueFactory property="periode"/>
+                </cellValueFactory>
+            </TableColumn>
+            <TableColumn text="Total">
+                <cellValueFactory>
+                    <PropertyValueFactory property="total"/>
+                </cellValueFactory>
+            </TableColumn>
+            <TableColumn text="Logement">
+                <cellValueFactory>
+                    <PropertyValueFactory property="logement"/>
+                </cellValueFactory>
+            </TableColumn>
+            <TableColumn text="Nourriture">
+                <cellValueFactory>
+                    <PropertyValueFactory property="nourriture"/>
+                </cellValueFactory>
+            </TableColumn>
+            <TableColumn text="Sortie">
+                <cellValueFactory>
+                    <PropertyValueFactory property="sortie"/>
+                </cellValueFactory>
+            </TableColumn>
+            <TableColumn text="Transport">
+                <cellValueFactory>
+                    <PropertyValueFactory property="transport"/>
+                </cellValueFactory>
+            </TableColumn>
+            <TableColumn text="Impôt">
+                <cellValueFactory>
+                    <PropertyValueFactory property="impot"/>
+                </cellValueFactory>
+            </TableColumn>
+            <TableColumn text="Autre">
+                <cellValueFactory>
+                    <PropertyValueFactory property="autre"/>
+                </cellValueFactory>
+            </TableColumn>
+        </columns>
+    </TableView>
+    <Button text="Ajouter" onAction="#openAddRowModal"/>
+</VBox>
