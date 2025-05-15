@@ -69,37 +69,37 @@ jobs:
           name: packages-linux
           path:
             build/jpackage/*
-#
-#  build-mac:
-#    strategy:
-#      matrix:
-#        java-version: [ 21 ]
-#
-#    runs-on: macos-latest
-#
-#    steps:
-#      - name: Checkout du code source
-#        uses: actions/checkout@v3
-#
-#      - name: Configuration JDK
-#        uses: actions/setup-java@v3
-#        with:
-#          java-version: ${{ matrix.java-version }}
-#          distribution: 'temurin'
-#          cache: 'gradle'
-#
-#      - name: Vérification des droits d'exécution sur gradlew
-#        run: chmod +x gradlew
-#
-#      - name: Clean du projet
-#        run: ./gradlew clean
-#
-#      - name: Création du package avec jlink et jpackage
-#        run: ./gradlew jpackage
-#
-#      - name: Récupération des packages
-#        uses: actions/upload-artifact@v4
-#        with:
-#          name: packages-${{ matrix.os }}
-#          path:
-#            build/jpackage/*
+
+  build-mac:
+    strategy:
+      matrix:
+        java-version: [ 21 ]
+
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout du code source
+        uses: actions/checkout@v3
+
+      - name: Configuration JDK
+        uses: actions/setup-java@v3
+        with:
+          java-version: ${{ matrix.java-version }}
+          distribution: 'temurin'
+          cache: 'gradle'
+
+      - name: Vérification des droits d'exécution sur gradlew
+        run: chmod +x gradlew
+
+      - name: Clean du projet
+        run: ./gradlew clean
+
+      - name: Création du package avec jlink et jpackage
+        run: ./gradlew jpackage
+
+      - name: Récupération des packages
+        uses: actions/upload-artifact@v4
+        with:
+          name: packages-mac
+          path:
+            build/jpackage/*
