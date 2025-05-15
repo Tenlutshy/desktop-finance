@@ -5,7 +5,6 @@ import java.time.format.DateTimeFormatter;
 
 public class Expense {
     private LocalDate periode;
-    private double total;
     private double logement;
     private double nourriture;
     private double sortie;
@@ -15,7 +14,6 @@ public class Expense {
 
     public Expense(LocalDate periode, double logement, double nourriture, double sortie, double transport, double impot, double autre) {
         this.periode = periode;
-        this.total = total;
         this.logement = logement;
         this.nourriture = nourriture;
         this.sortie = sortie;

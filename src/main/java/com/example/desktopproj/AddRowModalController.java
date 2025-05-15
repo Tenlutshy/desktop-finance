@@ -1,15 +1,19 @@
 package com.example.desktopproj;
 
 import com.example.desktopproj.classes.Expense;
+import com.example.desktopproj.classes.LoggerUtil;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
+import org.apache.log4j.Logger;
 
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.function.UnaryOperator;
 
 class AddExpenseDialog extends Dialog<Expense> {
+    private static final Logger logger = LoggerUtil.getLogger(AddExpenseDialog.class);
+
     public AddExpenseDialog() {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("add-row-modal.fxml"));
@@ -24,17 +28,22 @@ class AddExpenseDialog extends Dialog<Expense> {
 
             setResultConverter(buttonType -> {
                 if (buttonType == ButtonType.OK) {
+                    logger.debug("Bouton OK cliqué, création de la dépense");
                     return controller.createExpenseFromInputs();
                 }
+                logger.debug("Dialogue annulé");
                 return null;
             });
         } catch (IOException e) {
+            logger.error("Erreur lors du chargement de la boîte de dialogue: " + e.getMessage());
             throw new RuntimeException("Erreur lors du chargement de la boîte de dialogue", e);
         }
     }
 }
 
 public class AddRowModalController {
+    private static final Logger logger = LoggerUtil.getLogger(AddRowModalController.class);
+
     UnaryOperator<TextFormatter.Change> numberValidator = text -> {
         if (text.isReplaced()) {
             if (text.getText().matches("[^0-9]")) {
@@ -70,6 +79,7 @@ public class AddRowModalController {
 
     @FXML
     public void initialize() {
+        logger.debug("Initialisation du formulaire d'ajout de dépense");
         datePicker.setValue(LocalDate.now());
         logementField.setTextFormatter(new TextFormatter<>(numberValidator));
         logementField.setText("0");
@@ -94,6 +104,7 @@ public class AddRowModalController {
         try {
             LocalDate date = datePicker.getValue();
             if (date == null) {
+                logger.warn("Aucune date sélectionnée, utilisation de la date actuelle");
                 date = LocalDate.now();
             }
             double logement = Double.parseDouble(logementField.getText());
@@ -102,12 +113,14 @@ public class AddRowModalController {
             double transport = Double.parseDouble(transportField.getText());
             double impot = Double.parseDouble(impotField.getText());
             double autre = Double.parseDouble(autreField.getText());
-            return new Expense(date, logement, nourriture, sortie, transport, impot, autre);
+
+            Expense expense = new Expense(date, logement, nourriture, sortie, transport, impot, autre);
+            logger.info("Nouvelle dépense créée pour la date " + expense.getPeriode());
+            return expense;
 
         } catch (Exception e) {
-            System.err.println("Erreur lors de la création de la dépense: " + e.getMessage());
+            logger.error("Erreur lors de la création de la dépense: " + e.getMessage());
             return null;
         }
-
     }
 }

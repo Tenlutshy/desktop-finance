@@ -39,6 +39,10 @@ dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter-api:${junitVersion}")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:${junitVersion}")
     implementation("org.xerial:sqlite-jdbc:3.49.1.0")
+    implementation("org.slf4j:slf4j-api:2.0.12")
+    implementation("org.slf4j:slf4j-simple:2.0.12")
+    implementation("log4j:log4j:1.2.17")
+
 }
 
 tasks.withType<Test> {

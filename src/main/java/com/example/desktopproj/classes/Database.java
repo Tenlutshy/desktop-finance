@@ -1,5 +1,6 @@
 package com.example.desktopproj.classes;
 
+import org.apache.log4j.Logger;
 import org.sqlite.JDBC;
 
 import java.io.File;
@@ -7,12 +8,9 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.time.LocalDateTime;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class Database {
-
+    private static final Logger logger = LoggerUtil.getLogger(Database.class);
     /**
      * Location of database
      */
@@ -24,11 +22,23 @@ public class Database {
     private static final String requiredTable = "Expense";
 
     public static boolean isOK() {
-        if (!checkDrivers()) return false; //driver errors
+        if (!checkDrivers()) {
+            logger.error("Erreur avec les drivers SQLite");
+            return false;
+        }
 
-        if (!checkConnection()) return false; //can't connect to db
+        if (!checkConnection()) {
+            logger.error("Impossible de se connecter à la base de données");
+            return false;
+        }
 
-        return createTableIfNotExists(); //tables didn't exist
+        if (!createTableIfNotExists()) {
+            logger.error("Impossible de créer les tables nécessaires");
+            return false;
+        }
+
+        logger.info("Base de données initialisée avec succès à " + location);
+        return true;
     }
 
     private static String getDatabaseLocation() {
@@ -50,9 +60,14 @@ public class Database {
 
         File dbDir = new File(location);
         if (!dbDir.exists()) {
-            dbDir.mkdirs();
+            logger.info("Création du répertoire de base de données: " + location);
+            if (dbDir.mkdirs()) {
+                logger.info("Répertoire de base de données créé avec succès");
+            } else {
+                logger.warn("Impossible de créer le répertoire de base de données");
+            }
         }
-        
+
         return location + File.separator;
     }
 
@@ -60,18 +75,25 @@ public class Database {
         try {
             Class.forName("org.sqlite.JDBC");
             DriverManager.registerDriver(new JDBC());
+            logger.debug("Drivers SQLite chargés avec succès");
             return true;
-        } catch (ClassNotFoundException | SQLException classNotFoundException) {
-            Logger.getAnonymousLogger().log(Level.SEVERE, LocalDateTime.now() + ": Could not start SQLite Drivers");
+        } catch (ClassNotFoundException | SQLException e) {
+            logger.error("Impossible de charger les drivers SQLite:" + e.getMessage());
             return false;
         }
     }
 
     private static boolean checkConnection() {
         try (Connection connection = connect()) {
-            return connection != null;
+            boolean isConnected = connection != null;
+            if (isConnected) {
+                logger.debug("Test de connexion à la base de données réussi");
+            } else {
+                logger.warn("Test de connexion à la base de données échoué");
+            }
+            return isConnected;
         } catch (SQLException e) {
-            Logger.getAnonymousLogger().log(Level.SEVERE, LocalDateTime.now() + ": Could not connect to database");
+            logger.error("Erreur lors du test de connexion à la base de données: " + e.getMessage());
             return false;
         }
     }
@@ -91,11 +113,13 @@ public class Database {
                         """;
 
         try (Connection connection = Database.connect()) {
+            assert connection != null;
             PreparedStatement statement = connection.prepareStatement(createTables);
             statement.executeUpdate();
+            logger.info("Tables vérifiées/créées avec succès");
             return true;
         } catch (SQLException exception) {
-            Logger.getAnonymousLogger().log(Level.SEVERE, LocalDateTime.now() + ": Could not find tables in database");
+            logger.error("Erreur lors de la création des tables: " + exception.getMessage());
             return false;
         }
     }
@@ -104,14 +128,12 @@ public class Database {
         String dbPrefix = "jdbc:sqlite:";
         Connection connection;
         try {
+            logger.debug("Tentative de connexion à " + location);
             connection = DriverManager.getConnection(dbPrefix + location);
+            return connection;
         } catch (SQLException exception) {
-            Logger.getAnonymousLogger().log(Level.SEVERE,
-                    LocalDateTime.now() + ": Could not connect to SQLite DB at " +
-                            location);
+            logger.error("Erreur de connexion à la base de données SQLite: " + exception.getMessage());
             return null;
         }
-        return connection;
     }
-
 }
