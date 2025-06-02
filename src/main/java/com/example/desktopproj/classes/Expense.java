@@ -34,6 +34,9 @@ public class Expense {
         this.periode = LocalDate.parse(periode, DateTimeFormatter.ofPattern("dd/MM/yyyy"));
     }
 
+    public LocalDate getPeriodeAsLocalDate() {
+        return periode;
+    }
 
     public double getTotal() {
         return this.autre + this.impot + this.transport + this.sortie + this.nourriture + this.logement;

@@ -7,7 +7,7 @@
       stylesheets="@styles/expense-table.css"
       fx:controller="com.example.desktopproj.ExpenseTableController"
       alignment="TOP_CENTER">
-    <Label styleClass="title" text="Tableau récapitulatif des dépense"/>
+    <Label styleClass="title" text="Tableau récapitulatif des dépenses"/>
     <TableView fx:id="tableView">
         <columns>
             <TableColumn text="Période">

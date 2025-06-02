@@ -23,8 +23,8 @@ public class Application extends javafx.application.Application {
     @Override
     public void start(Stage stage) throws IOException {
         logger.info("Initialisation de l'interface utilisateur");
-        FXMLLoader fxmlLoader = new FXMLLoader(Application.class.getResource("expense-table.fxml"));
-        Scene scene = new Scene(fxmlLoader.load());
+        FXMLLoader fxmlLoader = new FXMLLoader(Application.class.getResource("main-layout.fxml"));
+        Scene scene = new Scene(fxmlLoader.load(), 1080, 720);
         stage.setTitle("Finance Management");
         stage.setScene(scene);
 
